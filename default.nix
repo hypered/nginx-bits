@@ -1,4 +1,8 @@
 rec {
+
+  # ----------------------------------------------------------------------------
+  # Drop connections of easily recognized scanners.
+
   # We use the same approach as in
   # https://blog.reiterate.app/software/2021/11/29/how-to-filter-bots-from-your-nginx-log-files/.
 
@@ -34,4 +38,43 @@ rec {
     #"~ (*UTF8)\\u0000".extraConfig = blackhole-extra-config;
     #"~ \\x00".extraConfig = blackhole-extra-config;
   };
+
+  # ----------------------------------------------------------------------------
+  # Use JSON as a logging format.
+
+  # A string that can be used as commonHttpConfig to define a JSON-based log
+  # format and activate it for all virtual servers. The default logging format
+  # is also retained.
+  setup-json-log-format = ''
+    # See http://nginx.org/en/docs/varindex.html,
+    # e.g. content_type, or goip_ stuff.
+    log_format json_format escape=json '{'
+      '"time": "$time_iso8601", '
+      '"request_id": "$request_id", '
+      '"server_name": "$server_name", '
+      '"remote_addr": "$remote_addr", '
+      '"remote_user": "$remote_user", '
+      '"http_host": "$http_host", '
+      '"scheme": "$scheme", '
+      '"request": "$request", '
+      '"request_method": "$request_method", '
+      '"request_uri": "$request_uri", '
+      '"request_filename": "$request_filename", '
+      '"normalized_uri": "$uri", '
+      '"status": "$status", '
+      '"request_completion": "$request_completion", '
+      '"request_length": "$request_length", '
+      '"request_time": "$request_time", '
+      '"upstream_addr": "$upstream_addr", '
+      '"upstream_bytes_received":"$upstream_bytes_received", '
+      '"upstream_connect_time":"$upstream_connect_time", '
+      '"upstream_response_length":"$upstream_response_length", '
+      '"upstream_response_time":"$upstream_response_time", '
+      '"bytes": "$body_bytes_sent", '
+      '"referrer": "$http_referer", '
+      '"agent": "$http_user_agent"'
+      '}';
+    access_log /var/log/nginx/access_json.log json_format;
+    access_log /var/log/nginx/access.log;
+  '';
 }
