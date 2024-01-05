@@ -34,6 +34,10 @@ rec {
     # We don't do Spring things.
     "~ /actuator/".extraConfig = blackhole-extra-config;
 
+    # Seems to be something called ManageEngine ADSelfService.
+    # We don't do that.
+    "~ /showLogin.cc".extraConfig = blackhole-extra-config;
+
     # Don't accept NUL byte anywhere. Unfortunately, this doesn't seem to work.
     #"~ (*UTF8)\\u0000".extraConfig = blackhole-extra-config;
     #"~ \\x00".extraConfig = blackhole-extra-config;
