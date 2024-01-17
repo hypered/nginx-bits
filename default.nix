@@ -75,6 +75,7 @@ rec {
       '"upstream_response_length":"$upstream_response_length", '
       '"upstream_response_time":"$upstream_response_time", '
       '"bytes": "$body_bytes_sent", '
+      '"accept_language": "$http_accept_language", '
       '"referrer": "$http_referer", '
       '"agent": "$http_user_agent"'
       '}';
